@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Manrope:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --page-bg:#F1E4CE;
+    --page-bg:#F7C9D6;
     --card-bg:#FBF3E7;
     --ink:#2B1B12;
     --ink-soft:#6b5847;
@@ -31,7 +31,7 @@
 
   body{
     background:
-      radial-gradient(circle at 1px 1px, rgba(43,27,18,0.07) 1px, transparent 0) 0 0/22px 22px,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70'%3E%3Cpath d='M35 55c-10-7-19-14-19-24a10.5 10.5 0 0 1 19-6 10.5 10.5 0 0 1 19 6c0 10-9 17-19 24z' fill='%23E8879E' fill-opacity='0.4'/%3E%3C/svg%3E") 0 0/70px 70px,
       var(--page-bg);
     color:var(--ink);
     font-family:'Manrope', sans-serif;
@@ -257,6 +257,25 @@
     margin-bottom:18px;
   }
 
+  .dodge-zone{
+    position:relative;
+    height:90px;
+    margin-bottom:4px;
+  }
+  .dodge-zone .btn-primary{
+    position:absolute;
+    left:0;
+    top:0;
+    width:calc(50% - 6px);
+  }
+  .btn-dodge{
+    position:absolute;
+    left:calc(50% + 6px);
+    top:0;
+    width:calc(50% - 6px);
+    transition:left 0.15s ease, top 0.15s ease;
+  }
+
   .footnote{
     margin-top:22px;
     padding-top:16px;
@@ -331,6 +350,7 @@
         <span class="punch filled" id="punch1"></span>
         <span class="punch" id="punch2"></span>
         <span class="punch" id="punch3"></span>
+        <span class="punch" id="punch4"></span>
       </div>
     </div>
 
@@ -359,7 +379,7 @@
 
     <!-- ЭКРАН 2 -->
     <section class="screen" id="screen-2" aria-labelledby="h1-2">
-      <h1 id="h1-2">Выберите число от 1 до 4</h1>
+      <h1 id="h1-2">Выберите свидание</h1>
 
       <div class="numbers-grid" id="numbers-grid">
         <button class="num-btn" data-num="1">1</button>
@@ -377,12 +397,22 @@
 
     <!-- ЭКРАН 3 -->
     <section class="screen" id="screen-3" aria-labelledby="h1-3">
+      <h1 id="h1-3">Нравится ли вам, когда Карен целует вас в лобик?</h1>
+
+      <div class="dodge-zone" id="dodge-zone">
+        <button class="btn-primary" id="btn-yes-3">Да</button>
+        <button class="btn-ghost btn-dodge" id="btn-no-3">Нет</button>
+      </div>
+    </section>
+
+    <!-- ЭКРАН 4 -->
+    <section class="screen" id="screen-4" aria-labelledby="h1-4">
       <div class="final-icon" aria-hidden="true">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
           <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.1c0-.6.4-1 1-1H7.4c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.3 0 .7-.2 1L6.6 10.8z" fill="#4A2E1F"/>
         </svg>
       </div>
-      <h1 id="h1-3">Карен вас ждёт у вашего дома. Позвоните ему, чтобы встретиться.</h1>
+      <h1 id="h1-4">Карен вас ждёт у вашего дома. Позвоните ему, чтобы встретиться.</h1>
       <p class="footnote">Билет действителен только сегодня, до 15:00</p>
     </section>
 
@@ -395,6 +425,7 @@
   const eyebrow = document.getElementById('eyebrow');
   const punch2 = document.getElementById('punch2');
   const punch3 = document.getElementById('punch3');
+  const punch4 = document.getElementById('punch4');
   const stamp = document.getElementById('stamp');
 
   function playStamp(text, cb){
@@ -457,6 +488,41 @@
       eyebrow.textContent = 'Билет №3';
       punch3.classList.add('filled');
       goToScreen('screen-3');
+    });
+  });
+
+  // Экран 3 — про поцелуй в лобик
+  const dodgeZone = document.getElementById('dodge-zone');
+  const btnYes3 = document.getElementById('btn-yes-3');
+  const btnNo3 = document.getElementById('btn-no-3');
+
+  function dodge(){
+    const zoneRect = dodgeZone.getBoundingClientRect();
+    const btnRect = btnNo3.getBoundingClientRect();
+    const maxLeft = Math.max(zoneRect.width - btnRect.width, 0);
+    const maxTop = Math.max(zoneRect.height - btnRect.height, 0);
+    const newLeft = Math.random() * maxLeft;
+    const newTop = Math.random() * maxTop;
+    btnNo3.style.left = newLeft + 'px';
+    btnNo3.style.top = newTop + 'px';
+  }
+
+  btnNo3.addEventListener('mouseenter', dodge);
+  btnNo3.addEventListener('mousemove', dodge);
+  btnNo3.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    dodge();
+  });
+  btnNo3.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    dodge();
+  }, { passive:false });
+
+  btnYes3.addEventListener('click', () => {
+    playStamp('ДА', () => {
+      eyebrow.textContent = 'Билет №4';
+      punch4.classList.add('filled');
+      goToScreen('screen-4');
     });
   });
 </script>
