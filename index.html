@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Билет на свидание</title>
+<title>Пригласительное для Полины Сальниковой</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Manrope:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -351,21 +351,21 @@
         <span class="punch" id="punch2"></span>
         <span class="punch" id="punch3"></span>
         <span class="punch" id="punch4"></span>
+        <span class="punch" id="punch5"></span>
       </div>
     </div>
-
     <!-- ЭКРАН 1 -->
     <section class="screen active" id="screen-1" aria-labelledby="h1-1">
-      <h1 id="h1-1">Пойдёте на свидание с Кареном в 15:00?</h1>
+      <h1 id="h1-1">Полина Андреевна, я Данил Сергеевич, официально зову вас на свидание, оно пройдет сегодня в 19:00 в кино</h1>
 
       <div class="meta-row">
         <div class="meta">
           <span class="label">Время</span>
-          <span class="value">15:00</span>
+          <span class="value">19:00</span>
         </div>
         <div class="meta">
           <span class="label">Кто</span>
-          <span class="value">Карен</span>
+          <span class="value">Данил Сергеевич Тимохович</span>
         </div>
       </div>
 
@@ -379,7 +379,7 @@
 
     <!-- ЭКРАН 2 -->
     <section class="screen" id="screen-2" aria-labelledby="h1-2">
-      <h1 id="h1-2">Выберите свидание</h1>
+      <h1 id="h1-2">Выберите кино в слепую</h1>
 
       <div class="numbers-grid" id="numbers-grid">
         <button class="num-btn" data-num="1">1</button>
@@ -388,7 +388,7 @@
         <button class="num-btn" data-num="4">4</button>
       </div>
 
-      <p class="feedback positive" id="feedback-2" role="status" aria-live="polite">Карен выбрал то же самое.</p>
+      <p class="feedback positive" id="feedback-2" role="status" aria-live="polite">Данилка выбрал то же самое.</p>
 
       <div class="continue-wrap" id="continue-wrap">
         <button class="btn-continue" id="btn-continue">Дальше</button>
@@ -397,7 +397,7 @@
 
     <!-- ЭКРАН 3 -->
     <section class="screen" id="screen-3" aria-labelledby="h1-3">
-      <h1 id="h1-3">Нравится ли вам, когда Карен целует вас в лобик?</h1>
+      <h1 id="h1-3">Нравится ли вам, когда Данил трогает вас во сне?</h1>
 
       <div class="dodge-zone" id="dodge-zone">
         <button class="btn-primary" id="btn-yes-3">Да</button>
@@ -407,16 +407,26 @@
 
     <!-- ЭКРАН 4 -->
     <section class="screen" id="screen-4" aria-labelledby="h1-4">
+      <h1 id="h1-4">Полина Андреевна готовы вы ли быть со мной до конца жизни?</h1>
+
+      <div class="dodge-zone" id="dodge-zone-2">
+        <button class="btn-primary" id="btn-yes-4">Да</button>
+        <button class="btn-ghost btn-dodge" id="btn-no-4">Нет</button>
+      </div>
+    </section>
+
+    <!-- ЭКРАН 5 -->
+    <section class="screen" id="screen-5" aria-labelledby="h1-5">
       <div class="final-icon" aria-hidden="true">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
           <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.1c0-.6.4-1 1-1H7.4c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.3 0 .7-.2 1L6.6 10.8z" fill="#4A2E1F"/>
         </svg>
       </div>
-      <h1 id="h1-4">Карен вас ждёт у вашего дома. Позвоните ему, чтобы встретиться.</h1>
-      <p class="footnote">Билет действителен только сегодня, до 15:00</p>
+      <h1 id="h1-5">Данилка ждет вас у входа на вашу работу, у него для вас есть не большой подарок</h1>
+      <p class="footnote">Предложение актуально только 7.07.2026</p>
     </section>
 
-    <div class="stamp" id="stamp">ДА</div>
+    <div class="stamp" id="stamp">СЮДА БЛИН</div>
 
   </div>
 </div>
@@ -426,6 +436,7 @@
   const punch2 = document.getElementById('punch2');
   const punch3 = document.getElementById('punch3');
   const punch4 = document.getElementById('punch4');
+  const punch5 = document.getElementById('punch5');
   const stamp = document.getElementById('stamp');
 
   function playStamp(text, cb){
@@ -496,26 +507,29 @@
   const btnYes3 = document.getElementById('btn-yes-3');
   const btnNo3 = document.getElementById('btn-no-3');
 
-  function dodge(){
-    const zoneRect = dodgeZone.getBoundingClientRect();
-    const btnRect = btnNo3.getBoundingClientRect();
-    const maxLeft = Math.max(zoneRect.width - btnRect.width, 0);
-    const maxTop = Math.max(zoneRect.height - btnRect.height, 0);
-    const newLeft = Math.random() * maxLeft;
-    const newTop = Math.random() * maxTop;
-    btnNo3.style.left = newLeft + 'px';
-    btnNo3.style.top = newTop + 'px';
+  function makeDodge(zoneEl, btnEl){
+    return function dodge(){
+      const zoneRect = zoneEl.getBoundingClientRect();
+      const btnRect = btnEl.getBoundingClientRect();
+      const maxLeft = Math.max(zoneRect.width - btnRect.width, 0);
+      const maxTop = Math.max(zoneRect.height - btnRect.height, 0);
+      const newLeft = Math.random() * maxLeft;
+      const newTop = Math.random() * maxTop;
+      btnEl.style.left = newLeft + 'px';
+      btnEl.style.top = newTop + 'px';
+    };
   }
 
-  btnNo3.addEventListener('mouseenter', dodge);
-  btnNo3.addEventListener('mousemove', dodge);
+  const dodge3 = makeDodge(dodgeZone, btnNo3);
+  btnNo3.addEventListener('mouseenter', dodge3);
+  btnNo3.addEventListener('mousemove', dodge3);
   btnNo3.addEventListener('pointerdown', (e) => {
     e.preventDefault();
-    dodge();
+    dodge3();
   });
   btnNo3.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    dodge();
+    dodge3();
   }, { passive:false });
 
   btnYes3.addEventListener('click', () => {
@@ -523,6 +537,31 @@
       eyebrow.textContent = 'Билет №4';
       punch4.classList.add('filled');
       goToScreen('screen-4');
+    });
+  });
+
+  // Экран 4 — про объятия
+  const dodgeZone2 = document.getElementById('dodge-zone-2');
+  const btnYes4 = document.getElementById('btn-yes-4');
+  const btnNo4 = document.getElementById('btn-no-4');
+
+  const dodge4 = makeDodge(dodgeZone2, btnNo4);
+  btnNo4.addEventListener('mouseenter', dodge4);
+  btnNo4.addEventListener('mousemove', dodge4);
+  btnNo4.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    dodge4();
+  });
+  btnNo4.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    dodge4();
+  }, { passive:false });
+
+  btnYes4.addEventListener('click', () => {
+    playStamp('УРАА', () => {
+      eyebrow.textContent = 'Билет №5';
+      punch5.classList.add('filled');
+      goToScreen('screen-5');
     });
   });
 </script>
