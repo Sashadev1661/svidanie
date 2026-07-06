@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Билет на свидание</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,600&family=Manrope:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#F1E4CE;
+    --card-bg:#FBF3E7;
+    --ink:#2B1B12;
+    --ink-soft:#6b5847;
+    --coffee:#4A2E1F;
+    --amber:#E8A33D;
+    --amber-deep:#C97F1C;
+    --brick:#B8503E;
+    --line:rgba(43,27,18,0.22);
+    --stamp:#B8503E;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+  }
+
+  body{
+    background:
+      radial-gradient(circle at 1px 1px, rgba(43,27,18,0.07) 1px, transparent 0) 0 0/22px 22px,
+      var(--page-bg);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:32px 16px;
+  }
+
+  .stage{
+    width:100%;
+    max-width:440px;
+    position:relative;
+  }
+
+  .ticket{
+    position:relative;
+    background:var(--card-bg);
+    border:1.5px dashed var(--line);
+    border-radius:18px;
+    padding:40px 32px 32px;
+    transform:rotate(-1.2deg);
+    box-shadow:0 18px 40px -18px rgba(43,27,18,0.35), 0 2px 0 rgba(43,27,18,0.05);
+    overflow:hidden;
+  }
+
+  .ticket::before,
+  .ticket::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:28px;
+    height:28px;
+    background:var(--page-bg);
+    border-radius:50%;
+    transform:translateY(-50%);
+  }
+  .ticket::before{ left:-14px; }
+  .ticket::after{ right:-14px; }
+
+  .ticket-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:22px;
+  }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  .punches{
+    display:flex;
+    gap:6px;
+  }
+  .punch{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    border:1.5px solid var(--coffee);
+    background:transparent;
+    transition:background 0.3s ease;
+  }
+  .punch.filled{
+    background:var(--coffee);
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(24px,6vw,30px);
+    line-height:1.25;
+    margin:0 0 28px;
+    color:var(--coffee);
+  }
+
+  .meta-row{
+    display:flex;
+    gap:18px;
+    margin-bottom:28px;
+    padding-bottom:20px;
+    border-bottom:1px dashed var(--line);
+  }
+  .meta{
+    font-family:'Space Mono', monospace;
+  }
+  .meta span{
+    display:block;
+  }
+  .meta .label{
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .meta .value{
+    font-size:14px;
+    font-weight:700;
+    color:var(--ink);
+  }
+
+  .actions{
+    display:flex;
+    gap:12px;
+  }
+
+  button{
+    font-family:'Manrope', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    border-radius:12px;
+    padding:14px 18px;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  button:focus-visible{
+    outline:2px solid var(--coffee);
+    outline-offset:3px;
+  }
+
+  .btn-primary{
+    flex:1;
+    background:var(--amber);
+    color:var(--coffee);
+    border-color:var(--amber);
+  }
+  .btn-primary:hover{ background:var(--amber-deep); border-color:var(--amber-deep); }
+  .btn-primary:active{ transform:scale(0.97); }
+
+  .btn-ghost{
+    flex:1;
+    background:transparent;
+    color:var(--brick);
+    border-color:var(--brick);
+  }
+  .btn-ghost:hover{ background:rgba(184,80,62,0.08); }
+  .btn-ghost.shake{
+    animation:shake 0.4s ease;
+  }
+
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-6px); }
+    40%{ transform:translateX(6px); }
+    60%{ transform:translateX(-4px); }
+    80%{ transform:translateX(4px); }
+  }
+
+  .feedback{
+    min-height:20px;
+    margin-top:14px;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--brick);
+    opacity:0;
+    transform:translateY(-4px);
+    transition:opacity 0.25s ease, transform 0.25s ease;
+  }
+  .feedback.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .feedback.positive{
+    color:var(--coffee);
+  }
+
+  .numbers-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:8px;
+  }
+  .num-btn{
+    aspect-ratio:1;
+    background:transparent;
+    border:2px solid var(--coffee);
+    color:var(--coffee);
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    padding:0;
+  }
+  .num-btn:hover:not(:disabled){
+    background:rgba(74,46,31,0.06);
+  }
+  .num-btn.selected{
+    background:var(--amber);
+    border-color:var(--amber);
+  }
+  .num-btn:disabled{
+    cursor:default;
+    opacity:0.55;
+  }
+  .num-btn:disabled.selected{
+    opacity:1;
+  }
+
+  .continue-wrap{
+    margin-top:18px;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.35s ease;
+  }
+  .continue-wrap.open{
+    max-height:80px;
+  }
+  .btn-continue{
+    width:100%;
+    background:var(--coffee);
+    color:var(--card-bg);
+    border-color:var(--coffee);
+  }
+  .btn-continue:hover{ background:#3a2316; }
+
+  .final-icon{
+    margin-bottom:18px;
+  }
+
+  .footnote{
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px dashed var(--line);
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.04em;
+  }
+
+  .stamp{
+    position:absolute;
+    top:38%;
+    left:50%;
+    width:150px;
+    height:150px;
+    border:4px solid var(--stamp);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:26px;
+    letter-spacing:0.08em;
+    color:var(--stamp);
+    background:rgba(251,243,231,0.85);
+    transform:translate(-50%,-50%) rotate(-14deg) scale(2.4);
+    opacity:0;
+    pointer-events:none;
+    z-index:5;
+  }
+  .stamp.play{
+    animation:stampHit 0.55s cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  @keyframes stampHit{
+    0%{ opacity:0; transform:translate(-50%,-50%) rotate(-14deg) scale(2.6); }
+    55%{ opacity:1; transform:translate(-50%,-50%) rotate(-12deg) scale(0.92); }
+    70%{ transform:translate(-50%,-50%) rotate(-12deg) scale(1.05); }
+    100%{ opacity:1; transform:translate(-50%,-50%) rotate(-12deg) scale(1); }
+  }
+
+  .screen{
+    display:none;
+  }
+  .screen.active{
+    display:block;
+    animation:fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+
+  @media (max-width:380px){
+    .ticket{ padding:32px 22px 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="ticket">
+
+    <div class="ticket-head">
+      <span class="eyebrow" id="eyebrow">Билет №1</span>
+      <div class="punches" aria-hidden="true">
+        <span class="punch filled" id="punch1"></span>
+        <span class="punch" id="punch2"></span>
+        <span class="punch" id="punch3"></span>
+      </div>
+    </div>
+
+    <!-- ЭКРАН 1 -->
+    <section class="screen active" id="screen-1" aria-labelledby="h1-1">
+      <h1 id="h1-1">Пойдёте на свидание с Кареном в 15:00?</h1>
+
+      <div class="meta-row">
+        <div class="meta">
+          <span class="label">Время</span>
+          <span class="value">15:00</span>
+        </div>
+        <div class="meta">
+          <span class="label">Кто</span>
+          <span class="value">Карен</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" id="btn-yes-1">Да</button>
+        <button class="btn-ghost" id="btn-no-1">Нет</button>
+      </div>
+
+      <p class="feedback" id="feedback-1" role="status" aria-live="polite">Ответ неправильный, попробуйте другой вариант ответа.</p>
+    </section>
+
+    <!-- ЭКРАН 2 -->
+    <section class="screen" id="screen-2" aria-labelledby="h1-2">
+      <h1 id="h1-2">Выберите число от 1 до 4</h1>
+
+      <div class="numbers-grid" id="numbers-grid">
+        <button class="num-btn" data-num="1">1</button>
+        <button class="num-btn" data-num="2">2</button>
+        <button class="num-btn" data-num="3">3</button>
+        <button class="num-btn" data-num="4">4</button>
+      </div>
+
+      <p class="feedback positive" id="feedback-2" role="status" aria-live="polite">Карен выбрал то же самое.</p>
+
+      <div class="continue-wrap" id="continue-wrap">
+        <button class="btn-continue" id="btn-continue">Дальше</button>
+      </div>
+    </section>
+
+    <!-- ЭКРАН 3 -->
+    <section class="screen" id="screen-3" aria-labelledby="h1-3">
+      <div class="final-icon" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+          <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.1c0-.6.4-1 1-1H7.4c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.3 0 .7-.2 1L6.6 10.8z" fill="#4A2E1F"/>
+        </svg>
+      </div>
+      <h1 id="h1-3">Карен вас ждёт у вашего дома. Позвоните ему, чтобы встретиться.</h1>
+      <p class="footnote">Билет действителен только сегодня, до 15:00</p>
+    </section>
+
+    <div class="stamp" id="stamp">ДА</div>
+
+  </div>
+</div>
+
+<script>
+  const eyebrow = document.getElementById('eyebrow');
+  const punch2 = document.getElementById('punch2');
+  const punch3 = document.getElementById('punch3');
+  const stamp = document.getElementById('stamp');
+
+  function playStamp(text, cb){
+    stamp.textContent = text;
+    stamp.classList.remove('play');
+    void stamp.offsetWidth;
+    stamp.classList.add('play');
+    setTimeout(() => {
+      stamp.classList.remove('play');
+      stamp.style.opacity = '0';
+      if (cb) cb();
+    }, 550);
+  }
+
+  function goToScreen(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // Экран 1
+  const btnYes1 = document.getElementById('btn-yes-1');
+  const btnNo1 = document.getElementById('btn-no-1');
+  const feedback1 = document.getElementById('feedback-1');
+
+  btnNo1.addEventListener('click', () => {
+    feedback1.classList.add('show');
+    btnNo1.classList.remove('shake');
+    void btnNo1.offsetWidth;
+    btnNo1.classList.add('shake');
+  });
+
+  btnYes1.addEventListener('click', () => {
+    playStamp('ДА', () => {
+      eyebrow.textContent = 'Билет №2';
+      punch2.classList.add('filled');
+      goToScreen('screen-2');
+    });
+  });
+
+  // Экран 2
+  const numButtons = document.querySelectorAll('.num-btn');
+  const feedback2 = document.getElementById('feedback-2');
+  const continueWrap = document.getElementById('continue-wrap');
+  const btnContinue = document.getElementById('btn-continue');
+
+  numButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      numButtons.forEach(b => {
+        b.disabled = true;
+        b.classList.remove('selected');
+      });
+      btn.classList.add('selected');
+      feedback2.classList.add('show');
+      continueWrap.classList.add('open');
+    });
+  });
+
+  btnContinue.addEventListener('click', () => {
+    playStamp('ОК', () => {
+      eyebrow.textContent = 'Билет №3';
+      punch3.classList.add('filled');
+      goToScreen('screen-3');
+    });
+  });
+</script>
+
+</body>
+</html>
